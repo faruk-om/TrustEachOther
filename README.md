@@ -16,7 +16,7 @@
 - 🔗 Unique deal URLs for each transaction
 - 🧾 Portable trust verification, platform-independent
 - 💳 Stripe integration with test card support
-- 📦 Shippo (USPS) tracking status integration (backend ready)
+- 📦 Shippo tracking status integration (backend ready)
 - ✅ Payment success page after checkout
 - 🔧 Built with React + Vite (Frontend), Express (Backend)
 
