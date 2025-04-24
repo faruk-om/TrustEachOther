@@ -1,36 +1,47 @@
 // routes/dealRoutes.js
 const express = require('express');
 const { randomUUID } = require('crypto');
+
 const router = express.Router();
 
-// **DEBUG**: show when this file is loaded
-console.log("✅ dealRoutes.js (IN-MEMORY) is LOADED");
+console.info('[INIT] In-memory dealRoutes loaded');
+
+const REQUIRED_FIELDS = ['sellerName', 'itemName', 'amount', 'feeMode'];
+
+const isValidRequest = (body) => {
+  return REQUIRED_FIELDS.every(field => body.hasOwnProperty(field) && body[field]);
+};
 
 router.post('/create-deal', (req, res) => {
-  // **BIG DEBUG** to confirm handler is running
-  console.log("🔥 [IN-MEMORY] /api/create-deal HIT", req.body);
+  const { body, app } = req;
+  console.debug('[POST] /api/create-deal', body);
 
-  const { sellerName, itemName, amount, feeMode } = req.body;
-  if (!sellerName || !itemName || !amount || !feeMode) {
+  if (!isValidRequest(body)) {
     return res.status(400).json({ error: 'Missing required fields' });
   }
 
-  const id   = randomUUID();
-  const deal = { id, sellerName, itemName, amount, feeMode };
-  req.app.locals.dealsStore.set(id, deal);
+  const id = randomUUID();
+  const deal = { id, ...body };
+  app.locals.dealsStore.set(id, deal);
 
-  return res.status(201).json({
-    message: 'Deal created (in-memory)',
+  res.status(201).json({
+    message: 'Deal created successfully',
     dealId: id,
-    link: `https://trusteachother.org/pay/${id}`
+    link: `https://trusteachother.org/pay/${id}`,
   });
 });
 
 router.get('/get-deal/:id', (req, res) => {
-  console.log("🔥 [IN-MEMORY] /api/get-deal HIT", req.params.id);
-  const deal = req.app.locals.dealsStore.get(req.params.id);
-  if (!deal) return res.status(404).json({ error: 'Deal not found' });
-  return res.json(deal);
+  const { id } = req.params;
+  console.debug('[GET] /api/get-deal', id);
+
+  const deal = req.app.locals.dealsStore.get(id);
+
+  if (!deal) {
+    return res.status(404).json({ error: 'Deal not found' });
+  }
+
+  res.status(200).json(deal);
 });
 
 module.exports = router;
