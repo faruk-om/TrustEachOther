@@ -80,6 +80,4 @@ TrustEachOther/
 
 ---
 
-## 📜 License
-
-MIT © 2024 Omar Faruk
+## Omar Faruk
