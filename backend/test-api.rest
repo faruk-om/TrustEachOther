@@ -1,0 +1,9 @@
+POST http://localhost:5000/api/create-deal
+Content-Type: application/json
+
+{
+  "sellerName": "Omar",
+  "itemName": "MacBook Pro",
+  "amount": 150000,
+  "feeMode": "split"
+}

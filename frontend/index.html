@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head><title>TrustEachOther</title></head>
+<body>
+  <h1>TrustEachOther MVP</h1>
+
+  <h3>1. Buyer: Pay</h3>
+  <button onclick="makePayment()">Pay $5</button>
+
+  <h3>2. Seller: Enter Tracking</h3>
+  <input id="tracking" placeholder="Tracking number" />
+  <button onclick="submitTracking()">Submit</button>
+
+  <script>
+    async function makePayment() {
+      const res = await fetch('http://localhost:5000/create-payment', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ amount: 500 })
+      });
+      const data = await res.json();
+      alert("Payment Intent Created. Client Secret: " + data.clientSecret);
+    }
+
+    async function submitTracking() {
+      const tracking = document.getElementById('tracking').value;
+      const res = await fetch('http://localhost:5000/submit-tracking', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ trackingNumber: tracking })
+      });
+      const data = await res.json();
+      alert("Tracking Status: " + data.status);
+    }
+  </script>
+</body>
+</html>
